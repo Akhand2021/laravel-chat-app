@@ -5,7 +5,7 @@ A real-time chat application built with Laravel, featuring user authentication, 
 ## Features
 
 -   User Authentication
--   Real-time Messaging using Laravel Echo and WebSockets
+-   Real-time Messaging using Laravel Echo and Pusher
 -   Unread Message Counts
 -   Modern UI with Tailwind CSS
 -   Responsive Design
@@ -18,7 +18,7 @@ A real-time chat application built with Laravel, featuring user authentication, 
 -   Composer
 -   Node.js & NPM
 -   MySQL/PostgreSQL
--   Redis (for broadcasting)
+-   Pusher account (for broadcasting)
 
 ## Installation Steps
 
@@ -48,7 +48,7 @@ A real-time chat application built with Laravel, featuring user authentication, 
     php artisan key:generate
     ```
 
-    Configure your `.env` file with your database and broadcasting settings:
+    Configure your `.env` file with your database and Pusher settings:
 
     ```
     DB_CONNECTION=mysql
@@ -58,10 +58,14 @@ A real-time chat application built with Laravel, featuring user authentication, 
     DB_USERNAME=your_username
     DB_PASSWORD=your_password
 
-    BROADCAST_DRIVER=redis
-    REDIS_HOST=127.0.0.1
-    REDIS_PASSWORD=null
-    REDIS_PORT=6379
+    BROADCAST_DRIVER=pusher
+    PUSHER_APP_ID=your_pusher_app_id
+    PUSHER_APP_KEY=your_pusher_app_key
+    PUSHER_APP_SECRET=your_pusher_app_secret
+    PUSHER_HOST=
+    PUSHER_PORT=443
+    PUSHER_SCHEME=https
+    PUSHER_APP_CLUSTER=your_pusher_cluster
     ```
 
 5. **Database Setup**
@@ -102,7 +106,7 @@ A real-time chat application built with Laravel, featuring user authentication, 
 2. **Real-time Messaging**
 
     - Laravel Echo for WebSocket connections
-    - Redis for broadcasting
+    - Pusher for broadcasting
     - Event-driven architecture
 
 3. **Frontend**
@@ -141,7 +145,7 @@ To start development:
     npm run dev
     ```
 
-3. Start Redis server (if using Redis for broadcasting)
+3. Make sure your Pusher credentials are properly configured in the `.env` file
 
 ## Testing
 
