@@ -1,12 +1,15 @@
-# Laravel Real-Time Chat Application
+# Laravel Real-Time Chat Application with Blog System
 
-A real-time chat application built with Laravel, featuring user authentication, real-time messaging, and per-user unread message counts.
+A real-time chat application built with Laravel, featuring user authentication, real-time messaging, per-user unread message counts, and a comprehensive blog system with rich text editing.
 
 ## Features
 
 -   User Authentication
 -   Real-time Messaging using Laravel Echo and Pusher
 -   Per-User Unread Message Counts
+-   Blog System with Rich Text Editor
+-   Image Upload in Blog Posts
+-   Category Management
 -   Modern UI with Tailwind CSS
 -   Responsive Design
 -   Message History
@@ -75,13 +78,19 @@ A real-time chat application built with Laravel, featuring user authentication, 
     php artisan db:seed
     ```
 
-6. **Compile Assets**
+6. **Create Storage Link**
+
+    ```bash
+    php artisan storage:link
+    ```
+
+7. **Compile Assets**
 
     ```bash
     npm run dev
     ```
 
-7. **Start the Development Server**
+8. **Start the Development Server**
     ```bash
     php artisan serve
     ```
@@ -89,80 +98,84 @@ A real-time chat application built with Laravel, featuring user authentication, 
 ## Project Structure
 
 -   `app/Events/` - Contains event classes for real-time messaging
--   `app/Http/Controllers/` - Contains controllers for handling chat logic
--   `app/Models/` - Contains User and Message models
--   `resources/views/` - Contains Blade templates for the chat interface
+-   `app/Http/Controllers/` - Contains controllers for handling chat and blog logic
+-   `app/Models/` - Contains User, Message, Post, and Category models
+-   `app/Policies/` - Contains authorization policies for blog posts
+-   `resources/views/` - Contains Blade templates for the chat interface and blog
 -   `routes/` - Contains web routes and broadcasting channels
 -   `database/migrations/` - Contains database migrations
+-   `public/js/` - Contains JavaScript files including the CKEditor upload adapter
 
 ## Key Components
 
 1. **Authentication**
-
-    - Laravel's built-in authentication system
     - User registration and login
-    - Session management
+    - Role-based access control
 
-2. **Real-time Messaging**
+2. **Real-time Chat**
+    - Instant messaging between users
+    - Unread message counts
+    - Message history
 
-    - Laravel Echo for WebSocket connections
-    - Pusher for broadcasting
-    - Event-driven architecture
+3. **Blog System**
+    - Create, read, update, and delete blog posts
+    - Rich text editing with CKEditor 5
+    - Image upload in blog posts
+    - Category management
+    - Featured images for posts
+    - Meta information for SEO
 
-3. **Frontend**
+4. **CKEditor Integration**
+    - Rich text editing
+    - Custom image upload adapter
+    - Image resizing and positioning
+    - Tables, lists, and formatting options
 
-    - Tailwind CSS for styling
-    - JavaScript for real-time updates
-    - Responsive design for mobile devices
+## Blog Features
 
-4. **Database**
-    - Users table for user management
-    - Messages table for chat history
-    - Relationships between users and messages
+### Post Management
+- Create, edit, and delete blog posts
+- Set post status (draft, published, archived)
+- Set post visibility (public, private)
+- Schedule posts with publish date
+- Add featured images
+
+### Category Management
+- Create, edit, and delete categories
+- Organize posts by categories
+- Hierarchical categories (parent-child relationships)
+
+### Rich Text Editor
+- CKEditor 5 integration
+- Image upload and management
+- Text formatting (bold, italic, headings)
+- Lists and tables
+- Links and blockquotes
+- Source code editing
+
+### Image Upload
+- Upload images directly in the editor
+- Custom upload adapter for server-side processing
+- Automatic image storage in public/storage/uploads
+- Image resizing and positioning options
 
 ## Usage
 
-1. Register a new account or login
-2. View the list of available users
-3. Click on a user to start a conversation
-4. Type your message and press Enter or click Send
-5. Messages will appear in real-time
-6. Unread message counts will update automatically
+### Creating a Blog Post
+1. Navigate to the Posts section
+2. Click "Create Post"
+3. Fill in the post details (title, body, category, etc.)
+4. Use the rich text editor to format your content
+5. Upload images using the image upload button
+6. Set the post status and visibility
+7. Click "Create" to publish
 
-## Development
-
-To start development:
-
-1. Start the Laravel development server:
-
-    ```bash
-    php artisan serve
-    ```
-
-2. Start the Vite development server:
-
-    ```bash
-    npm run dev
-    ```
-
-3. Make sure your Pusher credentials are properly configured in the `.env` file
-
-## Testing
-
-Run tests using:
-
-```bash
-php artisan test
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
+### Managing Categories
+1. Navigate to the Categories section
+2. Click "Create Category"
+3. Fill in the category details
+4. Click "Create" to save
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
