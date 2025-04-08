@@ -7,37 +7,38 @@ use App\Models\User;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
     public function index()
     {
         $users = User::where('id', '!=', Auth::id())->get();
-        $messages = Message::where(function($query) {
+        $messages = Message::where(function ($query) {
             $query->where('user_id', Auth::id())
-                  ->orWhere('recipient_id', Auth::id());
+                ->orWhere('recipient_id', Auth::id());
         })->with(['user', 'recipient'])->get();
-        
+
         return view('chat', compact('messages', 'users'));
     }
 
     public function getMessages(Request $request)
     {
-        $messages = Message::where(function($query) use ($request) {
-            $query->where(function($q) use ($request) {
+        $messages = Message::where(function ($query) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('user_id', Auth::id())
-                  ->where('recipient_id', $request->user_id);
-            })->orWhere(function($q) use ($request) {
+                    ->where('recipient_id', $request->user_id);
+            })->orWhere(function ($q) use ($request) {
                 $q->where('user_id', $request->user_id)
-                  ->where('recipient_id', Auth::id());
+                    ->where('recipient_id', Auth::id());
             });
         })->with(['user', 'recipient'])->get();
 
         // Mark messages as read
         Message::where('recipient_id', Auth::id())
-              ->where('user_id', $request->user_id)
-              ->where('is_read', false)
-              ->update(['is_read' => true]);
+            ->where('user_id', $request->user_id)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
 
         return response()->json($messages);
     }
@@ -53,19 +54,34 @@ class ChatController extends Controller
 
         // Load the relationships before broadcasting
         $message->load(['user', 'recipient']);
-        
+
         // Broadcast to all users (including sender)
         broadcast(new MessageSent($message))->toOthers();
 
         return response()->json($message);
     }
 
-    public function getUnreadCount()
+    public function getUnreadCount(Request $request)
     {
-        $count = Message::where('recipient_id', Auth::id())
-                       ->where('is_read', false)
-                       ->count();
-        
-        return response()->json(['count' => $count]);
+        // If a specific user_id is provided, return count for that user only
+        if ($request->has('user_id')) {
+            $count = Message::where('recipient_id', Auth::id())
+                ->where('user_id', $request->user_id)
+                ->where('is_read', false)
+                ->count();
+
+            return response()->json(['count' => $count]);
+        }
+
+        // Otherwise, return counts for all users
+        $unreadCounts = Message::where('recipient_id', Auth::id())
+            ->where('is_read', false)
+            ->select('user_id', DB::raw('count(*) as count'))
+            ->groupBy('user_id')
+            ->get()
+            ->pluck('count', 'user_id')
+            ->toArray();
+
+        return response()->json(['counts' => $unreadCounts]);
     }
 }

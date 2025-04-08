@@ -12,7 +12,7 @@ class PostPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasAnyRole(['admin', 'author']);
     }
 
     /**
@@ -20,31 +20,25 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return false;
+        return $user->hasAnyRole(['admin', 'author']);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user)
     {
-        return false;
+        return $user->hasAnyRole(['admin', 'author']);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->user_id;
+        return $user->id === $post->user_id || $user->hasRole('admin');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Post $post): bool
+    public function delete(User $user, Post $post)
     {
-        return false;
+        return $user->id === $post->user_id || $user->hasRole('admin');
     }
 
     /**
@@ -52,7 +46,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post): bool
     {
-        return false;
+        return $user->hasRole('admin');
     }
 
     /**
@@ -60,6 +54,6 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post): bool
     {
-        return false;
+        return $user->hasRole('admin');
     }
 }

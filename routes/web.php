@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,7 +15,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
 Route::middleware('auth')->group(function () {
+    Route::resource('posts', \App\Http\Controllers\Blog\PostController::class);
+    Route::resource('categories', CategoryController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -22,20 +28,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/messages', [App\Http\Controllers\ChatController::class, 'sendMessage']);
     Route::get('/messages/unread-count', [App\Http\Controllers\ChatController::class, 'getUnreadCount']);
 });
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+});
 
-// Broadcasting routes
-// Broadcast::routes(['middleware' => ['web', 'auth']]);
 Route::get('/whoami', function () {
     return auth()->user(); // should return ID 4
 });
 
-Route::post('/debug/broadcasting/auth', function (\Illuminate\Http\Request $request) {
-    return response()->json([
-        'user' => auth()->user(),
-        'cookie' => $request->cookie(),
-        'session' => session()->all(),
-    ]);
-});
+Route::post('ckeditor/upload', [App\Http\Controllers\Blog\PostController::class, 'uploadImage'])->name('ckeditor.upload');
 
 Broadcast::routes(["middleware" => ["web", "auth"]]);
 

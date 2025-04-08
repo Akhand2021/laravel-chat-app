@@ -1,12 +1,12 @@
 # Laravel Real-Time Chat Application
 
-A real-time chat application built with Laravel, featuring user authentication, real-time messaging, and unread message counts.
+A real-time chat application built with Laravel, featuring user authentication, real-time messaging, and per-user unread message counts.
 
 ## Features
 
 -   User Authentication
 -   Real-time Messaging using Laravel Echo and Pusher
--   Unread Message Counts
+-   Per-User Unread Message Counts
 -   Modern UI with Tailwind CSS
 -   Responsive Design
 -   Message History

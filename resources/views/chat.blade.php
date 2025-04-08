@@ -162,7 +162,7 @@
                         messageInput.value = '';
                         // Optionally append the sent message to the chat
                         const sentMessage = await response.json();
-                        appendMessage(sentMessage);
+                        // appendMessage(sentMessage);
                         messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     }
                 } catch (error) {
@@ -181,7 +181,7 @@
             // Update unread count
             async function updateUnreadCount(userId) {
                 try {
-                    const response = await fetch(`/messages/unread-count`);
+                    const response = await fetch(`/messages/unread-count?user_id=${userId}`);
                     const data = await response.json();
                     const unreadElement = document.querySelector(`[data-user-id="${userId}"] .unread-count`);
                     if (unreadElement) {
@@ -194,9 +194,26 @@
             }
 
             // Initial unread counts
-            document.querySelectorAll('.user-item').forEach(item => {
-                updateUnreadCount(item.dataset.userId);
-            });
+            async function loadAllUnreadCounts() {
+                try {
+                    const response = await fetch('/messages/unread-count');
+                    const data = await response.json();
+
+                    // Update each user's unread count
+                    Object.entries(data.counts).forEach(([userId, count]) => {
+                        const unreadElement = document.querySelector(`[data-user-id="${userId}"] .unread-count`);
+                        if (unreadElement) {
+                            unreadElement.textContent = count;
+                            unreadElement.classList.toggle('hidden', count === 0);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error loading unread counts:', error);
+                }
+            }
+
+            // Load initial unread counts
+            loadAllUnreadCounts();
         });
     </script>
 

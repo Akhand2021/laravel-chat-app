@@ -21,16 +21,26 @@ class Post extends Model
         'meta_keywords',
         'author',
         'source',
-        'category',
+        'category_id',
         'tags',
         'status',
         'visibility',
         'user_id',
     ];
 
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_published' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function getRouteKeyName()
