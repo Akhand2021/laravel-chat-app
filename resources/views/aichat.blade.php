@@ -17,7 +17,7 @@
 
     @if (isset($response))
     <h3>Gemma's Response:</h3>
-    <p>{{ $response }}</p>
+    {!!  Str::markdown( $response) !!}
     @endif
 </body>
 
