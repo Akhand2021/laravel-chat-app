@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AIChatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,7 +36,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 Route::get('/whoami', function () {
     return auth()->user(); // should return ID 4
 });
-
+Route::get('/ai-chat', [AIChatController::class, 'index']);
+Route::post('/ai-chat', [AIChatController::class, 'ask']);
 Route::post('ckeditor/upload', [App\Http\Controllers\Blog\PostController::class, 'uploadImage'])->name('ckeditor.upload');
 
 Broadcast::routes(["middleware" => ["web", "auth"]]);

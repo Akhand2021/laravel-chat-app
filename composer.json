@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3.16",
+        "ardagnsrn/ollama-php": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^12",
         "laravel/sanctum": "^4.0",
