@@ -30,5 +30,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'ollama' => [
+        'host' => env('OLLAMA_HOST', 'http://localhost:11434'),
+        'model' => env('OLLAMA_MODEL', 'gemma3:4b'),
+    ],
 
 ];

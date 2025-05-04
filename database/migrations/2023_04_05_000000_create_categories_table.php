@@ -23,11 +23,6 @@ return new class extends Migration
             $table->foreign('parent_id')->references('id')->on('categories')->onDelete('set null');
         });
 
-        // Add category_id to posts table
-        Schema::table('posts', function (Blueprint $table) {
-            $table->unsignedBigInteger('category_id')->nullable()->after('id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
-        });
     }
 
     /**
@@ -35,10 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
-            $table->dropColumn('category_id');
-        });
 
         Schema::dropIfExists('categories');
     }
